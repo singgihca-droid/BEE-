@@ -1,147 +1,111 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Untuk Kamu ☁️</title>
-
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    font-family: 'Segoe UI', sans-serif;
-    overflow: hidden;
-    background: linear-gradient(to bottom, #87ceeb, #dff6ff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* Awan */
-  .cloud {
-    position: absolute;
-    background: white;
-    border-radius: 50px;
-    opacity: 0.8;
-    animation: moveClouds linear infinite;
-  }
-
-  .cloud::before,
-  .cloud::after {
-    content: '';
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-  }
-
-  .cloud::before {
-    width: 60px;
-    height: 60px;
-    top: -30px;
-    left: 10px;
-  }
-
-  .cloud::after {
-    width: 80px;
-    height: 80px;
-    top: -40px;
-    right: 15px;
-  }
-
-  @keyframes moveClouds {
-    from { transform: translateX(-200px); }
-    to { transform: translateX(120vw); }
-  }
-
-  .card {
-    background: rgba(255,255,255,0.9);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    max-width: 420px;
-    text-align: center;
-    z-index: 10;
-  }
-
-  h1 {
-    color: #ff5c8a;
-  }
-
-  p {
-    font-size: 18px;
-    opacity: 0;
-    transition: opacity 1s;
-    margin: 12px 0;
-  }
-
-  p.show {
-    opacity: 1;
-  }
-
-  button {
-    background: #ff5c8a;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 30px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 15px;
-  }
-
-  button:hover {
-    background: #ff336d;
-  }
-</style>
+    <meta charset="UTF-8">
+    <title>Ucapan Pagi Ceria</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            text-align: center;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            font-size: 2.2em;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 20px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 20px;
+            background: #ff7a7a;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #ff5c5c;
+        }
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- Awan -->
-<div class="cloud" style="width:140px;height:50px;top:15%;animation-duration:60s;"></div>
-<div class="cloud" style="width:180px;height:60px;top:35%;animation-duration:80s;"></div>
-<div class="cloud" style="width:120px;height:45px;top:60%;animation-duration:70s;"></div>
+    <h1 id="greeting"></h1>
 
-<div class="card">
-  <h1 id="greeting"></h1>
-  <p id="question" class="show">siapkah menghadapi hari ini?</p>
-  <button id="readyBtn">aku siap!</button>
+    <div class="card">
+        <p id="intro"></p>
+    </div>
 
-  <div id="messages">
-    <p>hai, bidadari... semoga hari ini cerah dan lebih baik ya</p>
-    <p>maaf karena sering mengganggu waktumu :(</p>
-    <p>apa lagi hanya untuk urusan rindu</p>
-    <p>abis kamu tu bagi aku kek bunyi kereta api</p>
-    <p><b>cute.. cute.. cuteeee 💙</b></p>
-  </div>
+    <div class="card">
+        <h2>🎮 Mini Game: Tebak Angka Gemas</h2>
+        <p>Aku nyimpen angka rahasia dari 1–5. Coba tebak!</p>
+        <button onclick="playGame()">Tebak Sekarang</button>
+        <p id="result"></p>
+    </div>
 
-  <audio id="song" src="peak-of-love.mp3" loop></audio>
-</div>
+    <div class="card">
+        <h2>💖 Penyemangat Hari Ini</h2>
+        <p id="motivation"></p>
+    </div>
 
 <script>
-  // Greeting sesuai waktu
-  const greeting = document.getElementById("greeting");
-  const hour = new Date().getHours();
+    const days = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    const now = new Date();
+    const hour = now.getHours();
+    const dayName = days[now.getDay()];
 
-  if (hour >= 5 && hour < 11) greeting.innerText = "Selamat pagi ☀️";
-  else if (hour >= 11 && hour < 15) greeting.innerText = "Selamat siang 🌤️";
-  else if (hour >= 15 && hour < 18) greeting.innerText = "Selamat sore 🌇";
-  else greeting.innerText = "Selamat malam 🌙";
+    let timeGreeting = "";
+    if (hour >= 4 && hour < 11) {
+        timeGreeting = "Selamat Pagi";
+    } else if (hour >= 11 && hour < 15) {
+        timeGreeting = "Selamat Siang";
+    } else if (hour >= 15 && hour < 18) {
+        timeGreeting = "Selamat Sore";
+    } else {
+        timeGreeting = "Selamat Malam";
+    }
 
-  const btn = document.getElementById("readyBtn");
-  const song = document.getElementById("song");
-  const messages = document.querySelectorAll("#messages p");
+    document.getElementById("greeting").innerText =
+        `${timeGreeting} di Hari ${dayName} ☀️`;
 
-  btn.addEventListener("click", () => {
-    btn.style.display = "none";
-    document.getElementById("question").style.display = "none";
-    song.play();
+    document.getElementById("intro").innerText =
+        "Semoga harimu dimulai dengan senyum, kopi yang pas, dan hati yang tidak salah fokus ke aku 😌";
 
-    messages.forEach((msg, index) => {
-      setTimeout(() => {
-        msg.classList.add("show");
-      }, index * 1800);
-    });
-  });
+    function playGame() {
+        const secret = Math.floor(Math.random() * 5) + 1;
+        const guess = prompt("Masukkan angka 1 sampai 5:");
+
+        if (guess == secret) {
+            document.getElementById("result").innerText =
+                "🎉 YEAY! Tebakan kamu benar. Kamu emang sepintar itu (dan segemas itu).";
+        } else {
+            document.getElementById("result").innerText =
+                `😆 Hampir! Angkanya ${secret}. Gapapa, yang penting kamu tetap menang di hatiku.`;
+        }
+    }
+
+    const motivations = [
+        "Hari ini boleh capek, tapi jangan lupa: kamu berharga 💫",
+        "Kalau semangat itu sinyal, kamu full bar hari ini 📶",
+        "Kerja boleh serius, senyumnya jangan cuti 😄",
+        "Kalau kamu lelah, ingat… ada aku yang nyemangatin (walau cuma lewat layar 😜)"
+    ];
+
+    document.getElementById("motivation").innerText =
+        motivations[Math.floor(Math.random() * motivations.length)];
 </script>
 
 </body>
