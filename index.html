@@ -1,107 +1,180 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Ucapan Pagi Ceria</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #ffecd2, #fcb69f);
-            text-align: center;
-            padding: 40px;
-            color: #333;
-        }
-        h1 {
-            font-size: 2.2em;
-        }
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            max-width: 500px;
-            margin: 20px auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 20px;
-            background: #ff7a7a;
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #ff5c5c;
-        }
-        #result {
-            margin-top: 15px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Pink Gemas Day 💕</title>
+
+<style>
+    body {
+        font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #ffd1dc, #ffe6f0);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        color: #ff4d88;
+    }
+
+    .slide {
+        display: none;
+        padding: 40px 20px;
+        min-height: 100vh;
+    }
+
+    .active {
+        display: block;
+    }
+
+    .card {
+        background: #fff0f5;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 500px;
+        margin: auto;
+        box-shadow: 0 10px 20px rgba(255,77,136,0.3);
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 25px;
+        background: #ff7aa2;
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #ff5c8a;
+    }
+
+    h1, h2 {
+        margin-bottom: 10px;
+    }
+</style>
 </head>
+
 <body>
 
-    <h1 id="greeting"></h1>
+<!-- 🔊 SOUND -->
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="winSound" src="https://www.soundjay.com/human/sounds/children-yay-01.mp3"></audio>
 
+<!-- SLIDE 1 -->
+<div class="slide active">
     <div class="card">
+        <h1 id="greeting"></h1>
         <p id="intro"></p>
+        <button onclick="nextSlide()">Lanjut 👉</button>
     </div>
+</div>
 
+<!-- SLIDE 2 -->
+<div class="slide">
     <div class="card">
-        <h2>🎮 Mini Game: Tebak Angka Gemas</h2>
-        <p>Aku nyimpen angka rahasia dari 1–5. Coba tebak!</p>
-        <button onclick="playGame()">Tebak Sekarang</button>
-        <p id="result"></p>
+        <h2>🎮 Tebak Angka Gemas</h2>
+        <p>Aku nyimpen angka 1–5. Tebak yuk!</p>
+        <button onclick="playGuess()">Tebak 🎲</button>
+        <p id="guessResult"></p>
+        <button onclick="nextSlide()">Slide Selanjutnya 💕</button>
     </div>
+</div>
 
+<!-- SLIDE 3 -->
+<div class="slide">
     <div class="card">
-        <h2>💖 Penyemangat Hari Ini</h2>
+        <h2>🖱️ Click Counter Cinta</h2>
+        <p>Klik sebanyak-banyaknya! (seperti aku mikirin kamu)</p>
+        <h1 id="counter">0</h1>
+        <button onclick="addClick()">Klik Aku 💗</button><br>
+        <button onclick="nextSlide()">Lanjut Lagi 😆</button>
+    </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide">
+    <div class="card">
+        <h2>💖 Penyemangat Gemas</h2>
         <p id="motivation"></p>
+        <button onclick="restart()">Ulangi dari Awal 🔄</button>
     </div>
+</div>
 
 <script>
+    const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+    let count = 0;
+
+    const clickSound = document.getElementById("clickSound");
+    const winSound = document.getElementById("winSound");
+
+    function playSound(sound) {
+        sound.currentTime = 0;
+        sound.play();
+    }
+
+    function nextSlide() {
+        playSound(clickSound);
+        slides[currentSlide].classList.remove("active");
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add("active");
+    }
+
+    function restart() {
+        playSound(clickSound);
+        slides[currentSlide].classList.remove("active");
+        currentSlide = 0;
+        slides[currentSlide].classList.add("active");
+        count = 0;
+        document.getElementById("counter").innerText = count;
+    }
+
+    // Greeting otomatis
     const days = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
     const now = new Date();
     const hour = now.getHours();
     const dayName = days[now.getDay()];
 
-    let timeGreeting = "";
-    if (hour >= 4 && hour < 11) {
-        timeGreeting = "Selamat Pagi";
-    } else if (hour >= 11 && hour < 15) {
-        timeGreeting = "Selamat Siang";
-    } else if (hour >= 15 && hour < 18) {
-        timeGreeting = "Selamat Sore";
-    } else {
-        timeGreeting = "Selamat Malam";
-    }
+    let timeGreeting = hour < 11 ? "Selamat Pagi" :
+                       hour < 15 ? "Selamat Siang" :
+                       hour < 18 ? "Selamat Sore" :
+                                   "Selamat Malam";
 
     document.getElementById("greeting").innerText =
-        `${timeGreeting} di Hari ${dayName} ☀️`;
+        `${timeGreeting} di Hari ${dayName} 💕`;
 
     document.getElementById("intro").innerText =
-        "Semoga harimu dimulai dengan senyum, kopi yang pas, dan hati yang tidak salah fokus ke aku 😌";
+        "Semoga harimu semanis senyummu dan selembut warna pink ini 🌸";
 
-    function playGame() {
+    // Game tebak angka
+    function playGuess() {
+        playSound(clickSound);
         const secret = Math.floor(Math.random() * 5) + 1;
-        const guess = prompt("Masukkan angka 1 sampai 5:");
+        const guess = prompt("Masukkan angka 1–5:");
 
         if (guess == secret) {
-            document.getElementById("result").innerText =
-                "🎉 YEAY! Tebakan kamu benar. Kamu emang sepintar itu (dan segemas itu).";
+            playSound(winSound);
+            document.getElementById("guessResult").innerText =
+                "YEAY! Benar! Kamu lucu dan pintar 🥰";
         } else {
-            document.getElementById("result").innerText =
-                `😆 Hampir! Angkanya ${secret}. Gapapa, yang penting kamu tetap menang di hatiku.`;
+            document.getElementById("guessResult").innerText =
+                `Salah~ Angkanya ${secret}. Tapi kamu tetap menang di hatiku 😘`;
         }
     }
 
+    // Click counter
+    function addClick() {
+        playSound(clickSound);
+        count++;
+        document.getElementById("counter").innerText = count;
+    }
+
+    // Motivasi random
     const motivations = [
-        "Hari ini boleh capek, tapi jangan lupa: kamu berharga 💫",
-        "Kalau semangat itu sinyal, kamu full bar hari ini 📶",
-        "Kerja boleh serius, senyumnya jangan cuti 😄",
-        "Kalau kamu lelah, ingat… ada aku yang nyemangatin (walau cuma lewat layar 😜)"
+        "Kamu itu hebat, bahkan saat kamu ngerasa biasa aja 💗",
+        "Jangan kecil hati, kamu lebih bersinar dari glitter ✨",
+        "Capek boleh, nyerah jangan. Aku dukung kamu 😤💖",
+        "Kalau dunia capek, istirahat di senyum kamu aja 😊"
     ];
 
     document.getElementById("motivation").innerText =
