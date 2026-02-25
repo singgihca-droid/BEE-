@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Bucin Soft Day 💗</title>
+<title>Bucin Soft Cloud Day 💗</title>
 
 <style>
     body {
@@ -10,7 +10,25 @@
         font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #ffe4ec, #fff1f6);
         color: #ff5c8a;
-        text-align: center;
+        overflow: hidden;
+    }
+
+    /* ☁️ CLOUD ANIMATION */
+    .clouds {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background: url("https://i.ibb.co/7J2Yk9k/clouds.png") repeat-x;
+        animation: moveClouds 60s linear infinite;
+        opacity: 0.25;
+        z-index: -1;
+    }
+
+    @keyframes moveClouds {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
     }
 
     .page {
@@ -18,94 +36,137 @@
         min-height: 100vh;
         padding: 40px 20px;
         box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
 
     .active {
         display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .card {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 22px;
-        padding: 30px 25px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 24px;
+        padding: 30px;
         max-width: 520px;
-        box-shadow: 0 12px 30px rgba(255, 92, 138, 0.25);
+        box-shadow: 0 12px 30px rgba(255,92,138,0.25);
         animation: fadeUp 0.8s ease;
     }
 
     @keyframes fadeUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    h1, h2 {
-        margin-bottom: 15px;
-    }
-
-    p {
-        line-height: 1.6;
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     button {
         margin-top: 18px;
-        padding: 10px 20px;
+        padding: 10px 22px;
         border: none;
         border-radius: 25px;
         background: #ff7aa2;
         color: white;
         font-size: 1em;
         cursor: pointer;
+        display: none;
     }
 
     .tap {
-        margin-top: 25px;
+        margin-top: 22px;
         font-size: 0.85em;
         opacity: 0.7;
+    }
+
+    /* 🎉 CONFETTI */
+    .confetti {
+        position: fixed;
+        top: -10px;
+        width: 10px;
+        height: 10px;
+        background: pink;
+        animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(110vh) rotate(360deg);
+            opacity: 0;
+        }
     }
 </style>
 </head>
 
 <body>
 
+<div class="clouds"></div>
+
 <!-- 🔊 SOUND -->
 <audio id="tapSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3"></audio>
 <audio id="successSound" src="https://www.soundjay.com/human/sounds/children-yay-01.mp3"></audio>
 
-<!-- PAGE 1 -->
+<!-- PAGE 1: GREETING -->
 <div class="page active" onclick="handleTap(nextPage)">
     <div class="card">
         <h1 id="greeting"></h1>
         <p id="intro"></p>
-        <div class="tap">💗 sentuh layar untuk lanjut</div>
+        <div class="tap">☁️ sentuh layar perlahan</div>
     </div>
 </div>
 
-<!-- PAGE 2 -->
+<!-- PAGE 2: BASA BASI -->
 <div class="page" onclick="handleTap(nextPage)">
     <div class="card">
-        <h2>🦸‍♂️ Tebak Aku Siapa?</h2>
-        <p>Aku superhero Marvel. Kenali aku dari ciri-ciri ini:</p>
-        <div id="hints"></div>
-        <button onclick="guessHero(event)">Tebak 💭</button>
-        <p id="gameResult"></p>
-        <div class="tap">✨ sentuh layar untuk lanjut</div>
+        <h2>Eh… bentar ya 😳</h2>
+        <p>
+            Aku cuma mau nanya…<br>
+            kamu hari ini baik-baik aja kan?
+        </p>
+        <p>
+            Soalnya aku kepikiran sedikit.<br>
+            Sedikit doang kok. Iya, sedikit banyaaaak 😌
+        </p>
+        <div class="tap">💗 sentuh lagi</div>
     </div>
 </div>
 
-<!-- PAGE 3 -->
+<!-- PAGE 3: GOMBAL MALU -->
+<div class="page" onclick="handleTap(nextPage)">
+    <div class="card">
+        <h2>Hehe… satu lagi 🐱</h2>
+        <p>
+            kalo bisa kamu jangan trlalu cuek ya..<br>
+            nanti keliatan dingin
+        </p>
+        <p>
+            uda manis tambah dingin,<br>
+            Nanti ketuker sama Es Pelangi mang Cekoy😳
+        </p>
+        <div class="tap">✨ sentuh pelan-pelan</div>
+    </div>
+</div>
+
+<!-- PAGE 4: GAME -->
+<div class="page">
+    <div class="card">
+        <h2>🦸 Main Tebak Aku Siapa yuk?</h2>
+        <p>Aku superhero Marvel loh..</p>
+        <div id="hints"></div>
+
+        <button style="display:block" onclick="guessHero()">Tebak 💭</button>
+        <p id="gameResult"></p>
+
+        <button id="nextBtn" onclick="handleTap(nextPage)">
+            Lanjut 💕
+        </button>
+    </div>
+</div>
+
+<!-- PAGE 5: MOTIVASI -->
 <div class="page" onclick="handleTap(restart)">
     <div class="card">
         <h2>💖 Buat Kamu</h2>
         <p id="motivation"></p>
-        <div class="tap">🌸 sentuh untuk ulang dari awal</div>
+        <div class="tap">☁️ sentuh untuk ulang</div>
     </div>
 </div>
 
@@ -128,7 +189,7 @@
 
     function nextPage() {
         pages[currentPage].classList.remove("active");
-        currentPage = Math.min(currentPage + 1, pages.length - 1);
+        currentPage++;
         pages[currentPage].classList.add("active");
     }
 
@@ -144,49 +205,34 @@
     const hour = now.getHours();
     const dayName = days[now.getDay()];
 
-    let timeGreeting =
-        hour < 11 ? "Selamat Pagi" :
-        hour < 15 ? "Selamat Siang" :
-        hour < 18 ? "Selamat Sore" :
-        "Selamat Malam";
+    const timeGreeting =
+        hour < 11 ? "Selamat Pagi 🌻" :
+        hour < 15 ? "Selamat Siang 🌤️" :
+        hour < 18 ? "Selamat Sore 🌥️" :
+        "Selamat Malam 🌙";
 
     document.getElementById("greeting").innerText =
-        `${timeGreeting} di Hari ${dayName} ☀️`;
+        `${timeGreeting} di Hari ${dayName} my Cloudybear✨`;
 
     document.getElementById("intro").innerText =
-        "Semoga hari ini lembut ke kamu, seperti caramu tanpa sadar bikin orang lain nyaman 💗";
+        "Semoga hari ini datang pelan-pelan dan nggak bikin kamu capek duluan 💗";
 
     // HERO GAME
     const heroes = [
-        {
-            name: "Iron Man",
-            hints: ["Pakai armor canggih", "Jenius teknologi", "Kelihatannya cuek, aslinya peduli"]
-        },
-        {
-            name: "Spider-Man",
-            hints: ["Bisa nempel di dinding", "Baik dan polos", "Selalu berusaha walau sering jatuh"]
-        },
-        {
-            name: "Thor",
-            hints: ["Dewa petir", "Punya palu legendaris", "Kuat tapi hatinya hangat"]
-        },
-        {
-            name: "Captain America",
-            hints: ["Pakai tameng", "Pemimpin sejati", "Setia dan konsisten"]
-        }
+        { name: "Iron Man", hints: ["Armor canggih", "Jenius", "Kelihatan cuek tapi peduli"] },
+        { name: "Spider-Man", hints: ["Nempel di dinding", "Baik hati", "Pantang nyerah"] },
+        { name: "Thor", hints: ["Dewa petir", "Punya palu legendaris", "Kuat tapi hangat"] },
+        { name: "Captain America", hints: ["Pakai tameng", "Pemimpin sejati", "Setia"] }
     ];
 
     const hero = heroes[Math.floor(Math.random() * heroes.length)];
-    const hintsDiv = document.getElementById("hints");
-
     hero.hints.forEach(h => {
         const p = document.createElement("p");
         p.innerText = "• " + h;
-        hintsDiv.appendChild(p);
+        document.getElementById("hints").appendChild(p);
     });
 
-    function guessHero(e) {
-        e.stopPropagation();
+    function guessHero() {
         play(tapSound);
         const answer = prompt("Siapa aku?");
         if (!answer) return;
@@ -194,19 +240,34 @@
         if (answer.toLowerCase().includes(hero.name.toLowerCase())) {
             play(successSound);
             document.getElementById("gameResult").innerText =
-                "🎉 BENAR! Kamu peka banget… kayak hatimu yang gampang ngerti hal-hal kecil 😳";
+                "🎉 BENAR! Kamu pinter dan peka… Eh apa aku harus jadi teka-teki biar kmu sedikit peka😳";
+            document.getElementById("nextBtn").style.display = "inline-block";
+            celebrate();
         } else {
             document.getElementById("gameResult").innerText =
-                `😆 Jawabannya ${hero.name}. Tapi serius, caramu nebak aja udah bikin gemas.`;
+                "😆 salah dong. Coba lagi ya… aku yakin kamu bisa.";
         }
     }
 
-    // MOTIVASI BUCIN SOFT
+    // 🎉 CONFETTI
+    function celebrate() {
+        for (let i = 0; i < 40; i++) {
+            const conf = document.createElement("div");
+            conf.className = "confetti";
+            conf.style.left = Math.random() * 100 + "vw";
+            conf.style.background = ["#ff7aa2","#ffd1dc","#ffb6c1"][Math.floor(Math.random()*3)];
+            conf.style.animationDuration = 2 + Math.random()*2 + "s";
+            document.body.appendChild(conf);
+            setTimeout(() => conf.remove(), 3000);
+        }
+    }
+
+    // MOTIVASI
     const motivations = [
-        "Hari ini kamu nggak harus kuat terus. Lelah pun nggak apa-apa, kamu tetap berharga 💗",
-        "Kalau dunia agak berat, semoga ada hal kecil yang bikin kamu merasa ditemani 🌸",
-        "Sedikit gombal ya… kamu itu tipe yang bikin hari biasa jadi terasa lebih hangat 😌",
-        "Pelan-pelan aja, kamu nggak sendirian. Ada banyak hal baik yang masih nunggu kamu ✨"
+        "Kalau hari ini terasa berat, nggak apa istirahat sebentar yaa. Kamu tetap berharga kok💗",
+        "Sedikit gombal: kamu itu tipe yang bikin suasana jadi lebih tenang tanpa sadar 😌",
+        "Pelan-pelan aja yaa, kamu nggak perlu buru-buru rezeki sudah ada yang ngatur, keep Fighting✨",
+        "Semoga hari ini ada hal kecil yang bikin kamu senyum, walau sebentar, keep Fighting☁️"
     ];
 
     document.getElementById("motivation").innerText =
