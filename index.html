@@ -2,40 +2,61 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Pink Gemas Day 💕</title>
+<title>Bucin Soft Day 💗</title>
 
 <style>
     body {
-        font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #ffd1dc, #ffe6f0);
         margin: 0;
-        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #ffe4ec, #fff1f6);
+        color: #ff5c8a;
         text-align: center;
-        color: #ff4d88;
     }
 
-    .slide {
+    .page {
         display: none;
-        padding: 40px 20px;
         min-height: 100vh;
+        padding: 40px 20px;
+        box-sizing: border-box;
     }
 
     .active {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .card {
-        background: #fff0f5;
-        border-radius: 20px;
-        padding: 25px;
-        max-width: 500px;
-        margin: auto;
-        box-shadow: 0 10px 20px rgba(255,77,136,0.3);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 22px;
+        padding: 30px 25px;
+        max-width: 520px;
+        box-shadow: 0 12px 30px rgba(255, 92, 138, 0.25);
+        animation: fadeUp 0.8s ease;
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h1, h2 {
+        margin-bottom: 15px;
+    }
+
+    p {
+        line-height: 1.6;
     }
 
     button {
-        margin-top: 20px;
-        padding: 12px 20px;
+        margin-top: 18px;
+        padding: 10px 20px;
         border: none;
         border-radius: 25px;
         background: #ff7aa2;
@@ -44,12 +65,10 @@
         cursor: pointer;
     }
 
-    button:hover {
-        background: #ff5c8a;
-    }
-
-    h1, h2 {
-        margin-bottom: 10px;
+    .tap {
+        margin-top: 25px;
+        font-size: 0.85em;
+        opacity: 0.7;
     }
 </style>
 </head>
@@ -57,124 +76,137 @@
 <body>
 
 <!-- 🔊 SOUND -->
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-<audio id="winSound" src="https://www.soundjay.com/human/sounds/children-yay-01.mp3"></audio>
+<audio id="tapSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3"></audio>
+<audio id="successSound" src="https://www.soundjay.com/human/sounds/children-yay-01.mp3"></audio>
 
-<!-- SLIDE 1 -->
-<div class="slide active">
+<!-- PAGE 1 -->
+<div class="page active" onclick="handleTap(nextPage)">
     <div class="card">
         <h1 id="greeting"></h1>
         <p id="intro"></p>
-        <button onclick="nextSlide()">Lanjut 👉</button>
+        <div class="tap">💗 sentuh layar untuk lanjut</div>
     </div>
 </div>
 
-<!-- SLIDE 2 -->
-<div class="slide">
+<!-- PAGE 2 -->
+<div class="page" onclick="handleTap(nextPage)">
     <div class="card">
-        <h2>🎮 Tebak Angka Gemas</h2>
-        <p>Aku nyimpen angka 1–5. Tebak yuk!</p>
-        <button onclick="playGuess()">Tebak 🎲</button>
-        <p id="guessResult"></p>
-        <button onclick="nextSlide()">Slide Selanjutnya 💕</button>
+        <h2>🦸‍♂️ Tebak Aku Siapa?</h2>
+        <p>Aku superhero Marvel. Kenali aku dari ciri-ciri ini:</p>
+        <div id="hints"></div>
+        <button onclick="guessHero(event)">Tebak 💭</button>
+        <p id="gameResult"></p>
+        <div class="tap">✨ sentuh layar untuk lanjut</div>
     </div>
 </div>
 
-<!-- SLIDE 3 -->
-<div class="slide">
+<!-- PAGE 3 -->
+<div class="page" onclick="handleTap(restart)">
     <div class="card">
-        <h2>🖱️ Click Counter Cinta</h2>
-        <p>Klik sebanyak-banyaknya! (seperti aku mikirin kamu)</p>
-        <h1 id="counter">0</h1>
-        <button onclick="addClick()">Klik Aku 💗</button><br>
-        <button onclick="nextSlide()">Lanjut Lagi 😆</button>
-    </div>
-</div>
-
-<!-- SLIDE 4 -->
-<div class="slide">
-    <div class="card">
-        <h2>💖 Penyemangat Gemas</h2>
+        <h2>💖 Buat Kamu</h2>
         <p id="motivation"></p>
-        <button onclick="restart()">Ulangi dari Awal 🔄</button>
+        <div class="tap">🌸 sentuh untuk ulang dari awal</div>
     </div>
 </div>
 
 <script>
-    const slides = document.querySelectorAll(".slide");
-    let currentSlide = 0;
-    let count = 0;
+    const pages = document.querySelectorAll(".page");
+    let currentPage = 0;
 
-    const clickSound = document.getElementById("clickSound");
-    const winSound = document.getElementById("winSound");
+    const tapSound = document.getElementById("tapSound");
+    const successSound = document.getElementById("successSound");
 
-    function playSound(sound) {
+    function play(sound) {
         sound.currentTime = 0;
         sound.play();
     }
 
-    function nextSlide() {
-        playSound(clickSound);
-        slides[currentSlide].classList.remove("active");
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add("active");
+    function handleTap(action) {
+        play(tapSound);
+        action();
+    }
+
+    function nextPage() {
+        pages[currentPage].classList.remove("active");
+        currentPage = Math.min(currentPage + 1, pages.length - 1);
+        pages[currentPage].classList.add("active");
     }
 
     function restart() {
-        playSound(clickSound);
-        slides[currentSlide].classList.remove("active");
-        currentSlide = 0;
-        slides[currentSlide].classList.add("active");
-        count = 0;
-        document.getElementById("counter").innerText = count;
+        pages[currentPage].classList.remove("active");
+        currentPage = 0;
+        pages[currentPage].classList.add("active");
     }
 
-    // Greeting otomatis
+    // GREETING
     const days = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
     const now = new Date();
     const hour = now.getHours();
     const dayName = days[now.getDay()];
 
-    let timeGreeting = hour < 11 ? "Selamat Pagi" :
-                       hour < 15 ? "Selamat Siang" :
-                       hour < 18 ? "Selamat Sore" :
-                                   "Selamat Malam";
+    let timeGreeting =
+        hour < 11 ? "Selamat Pagi" :
+        hour < 15 ? "Selamat Siang" :
+        hour < 18 ? "Selamat Sore" :
+        "Selamat Malam";
 
     document.getElementById("greeting").innerText =
-        `${timeGreeting} di Hari ${dayName} 💕`;
+        `${timeGreeting} di Hari ${dayName} ☀️`;
 
     document.getElementById("intro").innerText =
-        "Semoga harimu semanis senyummu dan selembut warna pink ini 🌸";
+        "Semoga hari ini lembut ke kamu, seperti caramu tanpa sadar bikin orang lain nyaman 💗";
 
-    // Game tebak angka
-    function playGuess() {
-        playSound(clickSound);
-        const secret = Math.floor(Math.random() * 5) + 1;
-        const guess = prompt("Masukkan angka 1–5:");
+    // HERO GAME
+    const heroes = [
+        {
+            name: "Iron Man",
+            hints: ["Pakai armor canggih", "Jenius teknologi", "Kelihatannya cuek, aslinya peduli"]
+        },
+        {
+            name: "Spider-Man",
+            hints: ["Bisa nempel di dinding", "Baik dan polos", "Selalu berusaha walau sering jatuh"]
+        },
+        {
+            name: "Thor",
+            hints: ["Dewa petir", "Punya palu legendaris", "Kuat tapi hatinya hangat"]
+        },
+        {
+            name: "Captain America",
+            hints: ["Pakai tameng", "Pemimpin sejati", "Setia dan konsisten"]
+        }
+    ];
 
-        if (guess == secret) {
-            playSound(winSound);
-            document.getElementById("guessResult").innerText =
-                "YEAY! Benar! Kamu lucu dan pintar 🥰";
+    const hero = heroes[Math.floor(Math.random() * heroes.length)];
+    const hintsDiv = document.getElementById("hints");
+
+    hero.hints.forEach(h => {
+        const p = document.createElement("p");
+        p.innerText = "• " + h;
+        hintsDiv.appendChild(p);
+    });
+
+    function guessHero(e) {
+        e.stopPropagation();
+        play(tapSound);
+        const answer = prompt("Siapa aku?");
+        if (!answer) return;
+
+        if (answer.toLowerCase().includes(hero.name.toLowerCase())) {
+            play(successSound);
+            document.getElementById("gameResult").innerText =
+                "🎉 BENAR! Kamu peka banget… kayak hatimu yang gampang ngerti hal-hal kecil 😳";
         } else {
-            document.getElementById("guessResult").innerText =
-                `Salah~ Angkanya ${secret}. Tapi kamu tetap menang di hatiku 😘`;
+            document.getElementById("gameResult").innerText =
+                `😆 Jawabannya ${hero.name}. Tapi serius, caramu nebak aja udah bikin gemas.`;
         }
     }
 
-    // Click counter
-    function addClick() {
-        playSound(clickSound);
-        count++;
-        document.getElementById("counter").innerText = count;
-    }
-
-    // Motivasi random
+    // MOTIVASI BUCIN SOFT
     const motivations = [
-        "Kamu itu hebat, bahkan saat kamu ngerasa biasa aja 💗",
-        "Jangan kecil hati, kamu lebih bersinar dari glitter ✨",
-        "Capek boleh, nyerah jangan. Aku dukung kamu 😤💖",
-        "Kalau dunia capek, istirahat di senyum kamu aja 😊"
+        "Hari ini kamu nggak harus kuat terus. Lelah pun nggak apa-apa, kamu tetap berharga 💗",
+        "Kalau dunia agak berat, semoga ada hal kecil yang bikin kamu merasa ditemani 🌸",
+        "Sedikit gombal ya… kamu itu tipe yang bikin hari biasa jadi terasa lebih hangat 😌",
+        "Pelan-pelan aja, kamu nggak sendirian. Ada banyak hal baik yang masih nunggu kamu ✨"
     ];
 
     document.getElementById("motivation").innerText =
